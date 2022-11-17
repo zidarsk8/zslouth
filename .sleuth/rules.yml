@@ -12,6 +12,6 @@ rules:
           on_success:
             - trigger_build:
               parameters:
-                promote_and_deploy_tag: true
+                run_deploy: true
                 environment: preprod
-                version: {{ revision }}```
+                version: {{ revision }}

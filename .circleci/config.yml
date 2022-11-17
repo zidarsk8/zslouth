@@ -7,6 +7,9 @@ parameters:
   environment:
     type: string
     default: staging
+  version:
+    type: string
+    default: staging
 
 jobs:
   run-first:
@@ -20,6 +23,7 @@ jobs:
             echo '{"tags": ["blah"], "links": {"docs": "https://example.com"}}' > sleuth.yml
             sleep 10
             echo "Done running things"
+            echo "Hello <<pipeline.parameters.version>>"
       - store_artifacts:
           path: sleuth.yml
   run-second:
@@ -31,6 +35,7 @@ jobs:
           command: |
             echo "Done running second things"
             echo "Hello <<pipeline.parameters.environment>>"
+            echo "Hello <<pipeline.parameters.version>>"
 workflows:
   welcome:
     unless: << pipeline.parameters.run_deploy >>
