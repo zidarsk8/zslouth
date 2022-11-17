@@ -1,0 +1,6 @@
+sleuth/apps/deploy/migrations           #migration
+sleuth/apps/organization/migrations     #migration
+sleuth/apps/notification/migrations     #migration
+Pipfile.lock                            #py_upgrade
+yarn.lock                               #js_upgrade
+Dockerfile                              #docker

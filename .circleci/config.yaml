@@ -1,0 +1,52 @@
+version: 2.1
+
+parameters:
+  run_deploy:
+    default: false
+    type: boolean
+  environment:
+    type: string
+    default: staging
+
+jobs:
+  run-first:
+    docker:
+      - image: circleci/python:3.8.6
+    steps:
+      - run:
+          name: Run first things
+          command: |
+            echo "Running things"
+            echo '{"tags": ["blah"], "links": {"docs": "https://example.com"}}' > sleuth.yml
+            sleep 10
+            echo "Done running things"
+      - store_artifacts:
+          path: sleuth.yml
+  run-second:
+    docker:
+      - image: circleci/python:3.8.6
+    steps:
+      - run:
+          name: Run second things
+          command: |
+            echo "Done running second things"
+            echo "Hello <<pipeline.parameters.environment>>"
+workflows:
+  welcome:
+    unless: << pipeline.parameters.run_deploy >>
+    jobs:
+      - run-first
+      - approve-second:
+          type: approval
+          requires:
+            - run-first
+      - run-second:
+          requires:
+            - approve-second
+
+  deploy:
+    when: << pipeline.parameters.run_deploy >>
+    jobs:
+      - run-second
+
+
